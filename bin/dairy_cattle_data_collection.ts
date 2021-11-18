@@ -2,6 +2,7 @@
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
 import { DairyCattleDataCollectionStack } from '../lib/dairy_cattle_data_collection-stack';
+import { AwsIotRpiFleetProvisioningStack } from '../lib/aws-iot-rpi-fleet-provisioning-stack';
 
 const app = new cdk.App();
 new DairyCattleDataCollectionStack(app, 'DairyCattleDataCollectionStack', {
@@ -20,9 +21,9 @@ new DairyCattleDataCollectionStack(app, 'DairyCattleDataCollectionStack', {
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
 
-// new AwsIotRpiFleetProvisioningStack(app, 'AwsIotRpiFleetProvisioningStack', {
-//   // wifiPasswordSecretName: CONFIG.wifiPasswordSecretName,
-//   sshPublicKey: CONFIG.sshPublicKey,
-//   wifiCountry: CONFIG.wifiCountry,
-//   wifiSsid: CONFIG.wifiSsid,
-// });
+new AwsIotRpiFleetProvisioningStack(app, 'AwsIotRpiFleetProvisioningStack', {
+  // wifiPasswordSecretName: CONFIG.wifiPasswordSecretName,
+  sshPublicKey: CONFIG.sshPublicKey,
+  wifiCountry: CONFIG.wifiCountry,
+  wifiSsid: CONFIG.wifiSsid,
+});
