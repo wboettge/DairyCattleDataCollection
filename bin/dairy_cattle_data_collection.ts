@@ -3,6 +3,7 @@ import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
 import { DairyCattleDataCollectionStack } from '../lib/dairy_cattle_data_collection-stack';
 import { AwsIotRpiFleetProvisioningStack } from '../lib/aws-iot-rpi-fleet-provisioning-stack';
+import { CONFIG } from '../lib/utils/constants';
 
 const app = new cdk.App();
 new DairyCattleDataCollectionStack(app, 'DairyCattleDataCollectionStack', {
