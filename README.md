@@ -4,7 +4,7 @@ Leverages [AWS CDK](https://aws.amazon.com/cdk/) to allow for the deployment of 
 
 ## Table of contents
 - [Features](#features)
-- [Installation](#install)
+- [Installation](#installation)
 - [Usage](#usage)
 
 ## Features
