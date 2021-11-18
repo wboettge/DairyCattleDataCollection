@@ -1,0 +1,65 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description:
+  IoT Senosor Data Collection Pipeline
+Resources:
+  TimeStreamDatabase:
+    Type: AWS::Timestream::Database
+    Properties: 
+      DatabaseName: CFTestDB
+
+  TimeStreamTable:
+    Type: AWS::Timestream::Table
+    DependsOn: TimeStreamDatabase
+    Properties: 
+      TableName: CFTestTable
+      DatabaseName: CFTestDB
+      RetentionProperties:
+        MemoryStoreRetentionPeriodInHours: '24'
+        MagneticStoreRetentionPeriodInDays: '7'
+
+  IoTRuleTimeStreamAccessRole:
+    Type: AWS::IAM::Role
+    DependsOn: TimeStreamTable
+    Properties:
+      Description: Allows the IoT rule to access the TimeStream database
+      RoleName: IoTAccessToTimeStreamCF
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - iot.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyName: 'AccessTimestreamDBPolicy'
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement: 
+              - Effect: Allow
+                Action: timestream:WriteRecords
+                Resource: !GetAtt TimeStreamTable.Arn
+              - Effect: Allow
+                Action: timestream:DescribeEndpoints
+                Resource: '*'
+
+  IoTTopicRuleToTimestream:
+    Type: AWS::IoT::TopicRule
+    Properties:
+      RuleName: CFTestRule
+      TopicRulePayload:
+        Description: Sends IoT device data to a TimeStream database
+        AwsIotSqlVersion: 2015-10-08
+        RuleDisabled: "false"
+        Sql: !Sub |
+          SELECT Data.*
+          FROM 'test/temp'
+        Actions:
+          - Timestream:
+              DatabaseName: CFTestDB
+              TableName: CFTestTable
+              Dimensions:
+                - Name: Device_ID
+                  Value: ${Device_ID}
+              RoleArn: !GetAtt IoTRuleTimeStreamAccessRole.Arn
