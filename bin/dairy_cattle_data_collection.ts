@@ -19,3 +19,10 @@ new DairyCattleDataCollectionStack(app, 'DairyCattleDataCollectionStack', {
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
+
+// new AwsIotRpiFleetProvisioningStack(app, 'AwsIotRpiFleetProvisioningStack', {
+//   // wifiPasswordSecretName: CONFIG.wifiPasswordSecretName,
+//   sshPublicKey: CONFIG.sshPublicKey,
+//   wifiCountry: CONFIG.wifiCountry,
+//   wifiSsid: CONFIG.wifiSsid,
+// });
