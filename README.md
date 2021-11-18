@@ -1,6 +1,6 @@
 # Cloud Infrastructure for Daily Cattle Data Collection
 
-Includes configuration files and scripts to aid in the collection of IoT sensor data.
+Leverages [AWS CDK](https://aws.amazon.com/cdk/) to allow for the deployment of cloud resources to aid in the collection of dairy cow sensor data.
 
 ## Table of contents
 - [Features](#-features)
@@ -9,16 +9,27 @@ Includes configuration files and scripts to aid in the collection of IoT sensor 
 
 ## Features
 
-1. Create a custom raspbian based image. From AWS's
+The core idea is to provice an extensible and scalable data collection platform using cloud resources. These resources are specified here, making deployment straigtforward.
+
+The goal is to make it easy to set up raspberry pi gateways, collect and store the data produced by sensors, and then visualize the data being collected.
+
+Two CDK [stacks](https://docs.aws.amazon.com/cdk/latest/guide/stacks.html) are provided with the following functions:
+
+1. Build a custom raspbian based image with code from AWS's
 [fleet provisioning sample](https://github.com/aws-samples/aws-iot-rpi-fleet-provisioning).
     - Allows devices to connect to an
     [AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html) instance on first boot
         - Requests a fully functional identity on first boot with the necessary IoT permissions that the device can use for subsequent communication with AWS IoT Core.  
         - Device will be added as a Thing to the [AWS IoT Core Thing Registry](https://docs.aws.amazon.com/iot/latest/developerguide/iot-thing-management.html)
 
-2. Uses AWS [CloudFormation](https://aws.amazon.com/cloudformation/) to automatically provision the following resources:
+2. Collect and store sensor data using cloud resources:
     - [TimeStream](https://aws.amazon.com/timestream/) database to store sensor data
     - [IoT Rule](https://docs.aws.amazon.com/iot/latest/developerguide/iot-rules.html) to forward incoming IoT messages to the database
+
+## Installation
+### Prerequisates
+- The [aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) must be installed *and* configured with an AWS account on the deployment machine (see https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html for instructions on how to do this on your preferred development platform).
+- This project requires [Node.js](http://nodejs.org/), check if it is installed with `node -v`
 
 ## Usage
 ### Create custom image with fleet provisioning
