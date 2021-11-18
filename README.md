@@ -28,8 +28,20 @@ Two CDK [stacks](https://docs.aws.amazon.com/cdk/latest/guide/stacks.html) are p
 
 ## Installation
 ### Prerequisates
-- The [aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) must be installed *and* configured with an AWS account on the deployment machine (see https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html for instructions on how to do this on your preferred development platform).
-- This project requires [Node.js](http://nodejs.org/), check if it is installed with `node -v`
+- [aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) must be installed *and* configured with an AWS account on the deployment machine (see https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html for instructions on how to do this on your preferred development platform).
+- [Node.js and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [AWS CDK toolkit](https://docs.aws.amazon.com/cdk/latest/guide/cli.html)
+
+### Deployment
+- Update the Wifi network SSID/country and public SSH key used to connect to your devices in the [lib/utils/constants.ts](lib/utils/constants.ts) file.
+    - SSH isn't required, so the public key field can be left blank
+- Install cdk dependencies with `npm install`
+- Bootstrap your AWS environment to allow the use of the CDK with `cdk bootstrap`
+- Optionally, run `cdk diff` to view what resources will be created
+- To deploy, run `cdk deploy --all`
+- Verify that the resources have been created in your account by going to the AWS console -> CloudFormation -> Stacks. Three stacks should be visible with `CREATE_COMPLETE` messages
+
+![Create Complete in Console](images/StacksCreateComplete.png)
 
 ## Usage
 ### Create custom image with fleet provisioning
