@@ -2,7 +2,7 @@
 
 Leverages [AWS CDK](https://aws.amazon.com/cdk/) to allow for the deployment of cloud resources to aid in the collection of dairy cow sensor data.
 
-![Architecture Overview](images/DairyCattleArchitecture.svg)
+![Architecture Overview](images/DairyCattleArchitecture.png)
 
 ## Table of contents
 - [Features](#features)
