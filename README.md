@@ -2,6 +2,8 @@
 
 Leverages [AWS CDK](https://aws.amazon.com/cdk/) to allow for the deployment of cloud resources to aid in the collection of dairy cow sensor data.
 
+![Architecture Overview](images/DairyCattleArchitecture.svg)
+
 ## Table of contents
 - [Features](#features)
 - [Installation](#installation)
@@ -9,7 +11,7 @@ Leverages [AWS CDK](https://aws.amazon.com/cdk/) to allow for the deployment of 
 
 ## Features
 
-The core idea is to provice an extensible and scalable data collection platform using cloud resources. These resources are specified here, making deployment straigtforward.
+The core idea is to provice an extensible and scalable data collection platform using cloud resources. These resources are specified here, making deployment straightforward.
 
 The goal is to make it easy to set up raspberry pi gateways, collect and store the data produced by sensors, and then visualize the data being collected.
 
