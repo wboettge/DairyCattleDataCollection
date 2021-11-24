@@ -1,25 +1,13 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description:
   IoT Senosor Data Collection Pipeline
+Parameters:
+  TimeStreamTableARN:
+    Description: Passed from CDK Stack to be used for Rule Action Role
+    Type: String
 Resources:
-  TimeStreamDatabase:
-    Type: AWS::Timestream::Database
-    Properties: 
-      DatabaseName: CFTestDB
-
-  TimeStreamTable:
-    Type: AWS::Timestream::Table
-    DependsOn: TimeStreamDatabase
-    Properties: 
-      TableName: CFTestTable
-      DatabaseName: CFTestDB
-      RetentionProperties:
-        MemoryStoreRetentionPeriodInHours: '24'
-        MagneticStoreRetentionPeriodInDays: '7'
-
   IoTRuleTimeStreamAccessRole:
     Type: AWS::IAM::Role
-    DependsOn: TimeStreamTable
     Properties:
       Description: Allows the IoT rule to access the TimeStream database
       RoleName: IoTAccessToTimeStreamCF
@@ -39,7 +27,8 @@ Resources:
             Statement: 
               - Effect: Allow
                 Action: timestream:WriteRecords
-                Resource: !GetAtt TimeStreamTable.Arn
+                Resource: 
+                  Ref: TimeStreamTableARN
               - Effect: Allow
                 Action: timestream:DescribeEndpoints
                 Resource: '*'
