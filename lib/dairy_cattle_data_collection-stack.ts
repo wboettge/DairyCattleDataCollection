@@ -68,6 +68,11 @@ export class DairyCattleDataCollectionStack extends cdk.Stack {
         generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
       }),
       keyName: 'AWS',
+      init: ec2.CloudFormationInit.fromElements(
+        ec2.InitFile.fromFileInline('/etc/grafana/provisioning/dashboards/dashboards.yaml', './lib/Grafana/dashboards.yaml'),
+        ec2.InitFile.fromFileInline('/etc/grafana/provisioning/datasources/datasources.yaml', './lib/Grafana/datasources.yaml'),
+        ec2.InitFile.fromFileInline('/var/lib/grafana/dashboards/temperatureDash.json', './lib/Grafana/temperatureDash.json')
+      ),
     });
 
     const userDataScript = readFileSync('./lib/EC2StartupCommands.sh', 'utf8');
