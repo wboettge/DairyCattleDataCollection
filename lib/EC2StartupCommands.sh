@@ -25,4 +25,6 @@ grafana-cli plugins install grafana-timestream-datasource
 # mkdir /var/lib/grafana/dashboards
 # mv ~/temperatureDash.json /var/lib/grafana/dashboards/temperatureDash.json
 
+sed -i 's|;default_home_dashboard_path =|default_home_dashboard_path = /var/lib/grafana/dashboards/temperatureDash.json|g' /etc/grafana/grafana.ini
+
 systemctl restart grafana-server

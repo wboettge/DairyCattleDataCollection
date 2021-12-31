@@ -10,6 +10,7 @@ datasources:
     type: grafana-timestream-datasource
     #  <string, required> access mode. direct or proxy. Required
     access: direct
+    isDefault: true
     #  <map> fields that will be converted to json and stored in json_data
     jsonData:
       authType: default
