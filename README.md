@@ -27,16 +27,24 @@ Two CDK [stacks](https://docs.aws.amazon.com/cdk/latest/guide/stacks.html) are p
 2. Collect and store sensor data using cloud resources:
     - [TimeStream](https://aws.amazon.com/timestream/) database to store sensor data
     - [IoT Rule](https://docs.aws.amazon.com/iot/latest/developerguide/iot-rules.html) to forward incoming IoT messages to the database
+    - [EC2](https://aws.amazon.com/ec2/) instance running a Grafana server for data visualization
 
 ## Installation
 ### Prerequisates
+- AWS Account
+    - The resources required exceed the free tier limits, which will mean setting up a payment method with the account. Charges should be minimal (likely <$10, but potentially more with many messages). 
+    - If creating a new account, choose a Personal account with developer support plan (the lowest).
 - [aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) must be installed *and* configured with an AWS account on the deployment machine (see https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html for instructions on how to do this on your preferred development platform).
 - [Node.js and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+    - Run `npm -v` and `node -v` to check if you have these installed
 - [AWS CDK toolkit](https://docs.aws.amazon.com/cdk/latest/guide/cli.html)
 
 ### Deployment
-- Update the Wifi network SSID/country and public SSH key used to connect to your devices in the [lib/utils/constants.ts](lib/utils/constants.ts) file.
+- Clone a local copy of the repository
+- Navigate to the cloned directory
+- Update the Wifi network SSID,country, and password and public SSH key used to connect to your devices in [lib/utils/constants.ts](lib/utils/constants.ts).
     - SSH isn't required, so the public key field can be left blank
+    - If connecting to UWNet, the `wifiPasswordSecretName` must be left blank, and the device you are using to connect must be registered with UWNet. This can be done when using the device for the first time, or if you have the MAC address, by following the directions here: https://kb.wisc.edu/helpdesk/page.php?id=79140
 - Install cdk dependencies with `npm install`
 - Bootstrap your AWS environment to allow the use of the CDK with `cdk bootstrap`
 - Optionally, run `cdk diff` to view what resources will be created
@@ -73,3 +81,8 @@ sudo dd bs=1m if=aws-raspbian.img of=/dev/disk123abcd conv=sync
 ```
 
 A Raspberry Pi booting using this image will automatically requests a fully functional identity on first boot with the necessary IoT permissions that the device can use for subsequent communication with AWS IoT Core (see [rpi-image-builder/firstboot.bash](rpi-image-builder/firstboot.bash)).
+
+### Sending Data to AWS IoT
+
+
+### Visualizing the Data in Grafana
