@@ -37,7 +37,13 @@ export class DairyCattleDataCollectionStack extends cdk.Stack {
     });
 
     // Define an EC2 instance
-    const vpc = new ec2.Vpc(this, 'VPC');
+    // TODO use default VPC
+    const vpc = new ec2.Vpc(this, 'VPC', {
+      subnetConfiguration: [{
+        name: "public-subnet",
+        subnetType: ec2.SubnetType.PUBLIC
+      }]
+    });
     const mySecurityGroup = new ec2.SecurityGroup(this, 'SecurityGroup', {
       vpc,
       description: 'Allow ssh and Grafana access to ec2 instance',
