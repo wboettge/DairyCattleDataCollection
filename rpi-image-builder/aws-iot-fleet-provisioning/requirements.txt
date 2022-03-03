@@ -2,3 +2,12 @@ asyncio==3.4.3
 pyfiglet==0.8.post1
 awsiotsdk==1.5.2
 
+Adafruit_Blinka==7.0.1
+adafruit_circuitpython_am2320==1.2.7
+adafruit_circuitpython_rfm9x==2.2.3
+adafruit_circuitpython_ssd1306==2.12.4
+adafruit_ssd1306==1.6.2
+board==1.0
+boto3==1.21.11
+pyserial==3.5
+setuptools==40.8.0
