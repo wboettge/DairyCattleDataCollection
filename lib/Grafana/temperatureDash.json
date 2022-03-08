@@ -22,7 +22,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1638664750394,
+  "iteration": 1646759662419,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -41,10 +41,6 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "grafana-timestream-datasource",
-        "uid": "P6336CF1EF4787F6A"
-      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -97,7 +93,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 1
       },
@@ -116,20 +112,24 @@
       "repeatDirection": "h",
       "targets": [
         {
+          "database": "\"CFTestDB\"",
           "datasource": {
             "type": "grafana-timestream-datasource",
             "uid": "P6336CF1EF4787F6A"
           },
+          "hide": false,
+          "measure": "${DataSource}",
           "queryType": "raw",
-          "rawQuery": "SELECT *\nFROM \"CFTestDB\".\"CFTestTable\"\nWHERE time between ago(24h) and now()\nORDER BY time",
-          "refId": "A"
+          "rawQuery": "SELECT *\nFROM CFTestDB.CFTestTable\nWHERE time between ago(24h) and now() and Device_ID= '${DataSource}' and measure_name= '${Measure}'\nORDER BY time",
+          "refId": "A",
+          "table": "\"CFTestTable\""
         }
       ],
       "title": "$DataSource - $Measure",
       "type": "timeseries"
     }
   ],
-  "schemaVersion": 33,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [],
   "templating": {
