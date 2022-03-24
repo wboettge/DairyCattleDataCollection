@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
-import * as cdk from '@aws-cdk/core';
+import { App } from 'aws-cdk-lib';
 import { DairyCattleDataCollectionStack } from '../lib/dairy_cattle_data_collection-stack';
 import { AwsIotRpiFleetProvisioningStack } from '../lib/aws-iot-rpi-fleet-provisioning-stack';
 import { CONFIG } from '../lib/utils/constants';
 
-const app = new cdk.App();
+const app = new App();
 new DairyCattleDataCollectionStack(app, 'DairyCattleDataCollectionStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,

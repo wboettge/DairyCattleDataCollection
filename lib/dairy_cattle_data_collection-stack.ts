@@ -1,16 +1,18 @@
 import * as path from 'path';
 
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as timestream from '@aws-cdk/aws-timestream';
-import * as iam from '@aws-cdk/aws-iam';
-import * as cdk from '@aws-cdk/core';
-import * as cfninc from '@aws-cdk/cloudformation-include';
+import * as cdk from 'aws-cdk-lib/core';
+import * as cfninc from 'aws-cdk-lib/cloudformation-include';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as iot from 'aws-cdk-lib/aws-iot';
+import * as timestream from 'aws-cdk-lib/aws-timestream';
 
+import { Construct } from 'constructs';
 import {readFileSync} from 'fs';
 
 
 export class DairyCattleDataCollectionStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     // Create a TimeStream Database and table to store sensor data
@@ -30,12 +32,12 @@ export class DairyCattleDataCollectionStack extends cdk.Stack {
     // No cdk support yet for IoT topic rule actions. Therefore the resource
     // and IAM role is defined in a CloudFormation configuration file
     // TODO cdk support now exists, so use the constructs instead of the CFN
-    const timestreamRuleAction = new cfninc.CfnInclude(this, 'Template', { 
-      templateFile: path.join(__dirname, 'iot_rule_action.yaml'),
-      parameters: {
-        'TimeStreamTableARN': cfnTable.attrArn
-      }
-    });
+    // const timestreamRuleAction = new cfninc.CfnInclude(this, 'Template', { 
+    //   templateFile: path.join(__dirname, 'iot_rule_action.yaml'),
+    //   parameters: {
+    //     'TimeStreamTableARN': cfnTable.attrArn
+    //   }
+    // });
 
     // Define an EC2 instance
     const vpc = new ec2.Vpc(this, 'VPC', {
