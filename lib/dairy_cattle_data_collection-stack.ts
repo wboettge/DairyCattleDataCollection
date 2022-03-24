@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-import * as cdk from 'aws-cdk-lib/core';
+import * as cdk from 'aws-cdk-lib';
 import * as cfninc from 'aws-cdk-lib/cloudformation-include';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as iam from 'aws-cdk-lib/aws-iam';
