@@ -32,12 +32,36 @@ export class DairyCattleDataCollectionStack extends cdk.Stack {
     // No cdk support yet for IoT topic rule actions. Therefore the resource
     // and IAM role is defined in a CloudFormation configuration file
     // TODO cdk support now exists, so use the constructs instead of the CFN
-    const timestreamRuleAction = new cfninc.CfnInclude(this, 'Template', { 
+    /*const timestreamRuleAction = new cfninc.CfnInclude(this, 'Template', { 
       templateFile: path.join(__dirname, 'iot_rule_action.yaml'),
       parameters: {
         'TimeStreamTableARN': cfnTable.attrArn
       }
-    });
+    }); */
+
+    const cfnTopicRule = new iot.CfnTopicRule(this, 'CFTestRule', {
+  topicRulePayload: {
+    actions: [{            
+      timestream: {
+        databaseName: 'CFTestDB',
+        dimensions: [{
+          name: 'Device_ID',
+          value: '${Device_ID}',
+        }],
+        roleArn: '!GetAtt IoTRuleTimeStreamAccessRole.Arn',
+        tableName: 'CFTestTable',
+      },
+    }],
+    sql: '!Sub |',
+
+    // the properties below are optional
+    awsIotSqlVersion: '2015-10-08',
+    description: 'Sends IoT device data to a TimeStream database',
+    ruleDisabled: false,
+  },
+
+});
+//ENDS HERE
 
     // Define an EC2 instance
     const vpc = new ec2.Vpc(this, 'VPC', {
