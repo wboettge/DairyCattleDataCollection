@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import { App } from 'aws-cdk-lib';
-import { DairyCattleDataCollectionStack } from '../lib/dairy_cattle_data_collection-stack';
+import { DairyCattleDataCollectionStack, GrafanaServerStack } from '../lib/dairy_cattle_data_collection-stack';
 import { AwsIotRpiFleetProvisioningStack } from '../lib/aws-iot-rpi-fleet-provisioning-stack';
 import { CONFIG } from '../lib/utils/constants';
 
@@ -21,6 +21,8 @@ new DairyCattleDataCollectionStack(app, 'DairyCattleDataCollectionStack', {
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
+
+new GrafanaServerStack(app, 'GrafanaServerStack', {});
 
 new AwsIotRpiFleetProvisioningStack(app, 'AwsIotRpiFleetProvisioningStack', {
   // wifiPasswordSecretName: CONFIG.wifiPasswordSecretName,

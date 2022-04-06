@@ -1,7 +1,6 @@
 import * as path from 'path';
 
 import * as cdk from 'aws-cdk-lib';
-import * as cfninc from 'aws-cdk-lib/cloudformation-include';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as iot from 'aws-cdk-lib/aws-iot';
@@ -29,39 +28,40 @@ export class DairyCattleDataCollectionStack extends cdk.Stack {
       tableName: 'CFTestTable'
     });
 
-    // No cdk support yet for IoT topic rule actions. Therefore the resource
-    // and IAM role is defined in a CloudFormation configuration file
-    // TODO cdk support now exists, so use the constructs instead of the CFN
-    /*const timestreamRuleAction = new cfninc.CfnInclude(this, 'Template', { 
-      templateFile: path.join(__dirname, 'iot_rule_action.yaml'),
-      parameters: {
-        'TimeStreamTableARN': cfnTable.attrArn
-      }
-    }); */
+    // Role is passed to topic rule allowing it to write to the timestream database
+    const iotRuleTimeStreamAccessRole = new iam.Role(this, 'IoTRuleTimeStreamAccessRole', {
+      assumedBy: new iam.ServicePrincipal('iot.amazonaws.com'),
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonTimestreamFullAccess'),
+      ],
+      description: 'Allows the IoT rule to access the TimeStream database'
+    });
 
     const cfnTopicRule = new iot.CfnTopicRule(this, 'CFTestRule', {
-  topicRulePayload: {
-    actions: [{            
-      timestream: {
-        databaseName: 'CFTestDB',
-        dimensions: [{
-          name: 'Device_ID',
-          value: '${Device_ID}',
+      topicRulePayload: {
+        actions: [{            
+          timestream: {
+            databaseName: 'CFTestDB',
+            dimensions: [{
+              name: 'Device_ID',
+              value: '${Device_ID}',
+            }],
+            roleArn: iotRuleTimeStreamAccessRole.roleArn,
+            tableName: 'CFTestTable',
+          },
         }],
-        roleArn: '!GetAtt IoTRuleTimeStreamAccessRole.Arn',
-        tableName: 'CFTestTable',
+        sql: 'SELECT Data.*\n FROM \'test/temp\'',
+        awsIotSqlVersion: '2015-10-08',
+        description: 'Sends IoT device data to a TimeStream database',
+        ruleDisabled: false,
       },
-    }],
-    sql: '!Sub |',
+    });
+  };
+};
 
-    // the properties below are optional
-    awsIotSqlVersion: '2015-10-08',
-    description: 'Sends IoT device data to a TimeStream database',
-    ruleDisabled: false,
-  },
-
-});
-//ENDS HERE
+export class GrafanaServerStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
 
     // Define an EC2 instance
     const vpc = new ec2.Vpc(this, 'VPC', {
@@ -109,5 +109,5 @@ export class DairyCattleDataCollectionStack extends cdk.Stack {
 
     const userDataScript = readFileSync('./lib/EC2StartupCommands.sh', 'utf8');
     ec2Instance.addUserData(userDataScript);
-  }
-}
+  };
+};
