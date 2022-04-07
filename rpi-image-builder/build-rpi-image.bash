@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 RASPBIAN_DOWNLOAD_FILENAME="raspbian_image.zip"
-RASPBIAN_SOURCE_URL="https://downloads.raspberrypi.org/raspbian_latest"
-RASPBIAN_URL_BASE="https://downloads.raspberrypi.org/raspbian/images/"
+RASPBIAN_SOURCE_URL="https://downloads.raspberrypi.org/raspios_armhf_latest"
+RASPBIAN_URL_BASE="https://downloads.raspberrypi.org/raspios_armhf/images/"
 SDCARD_MOUNT="/mnt/sdcard"
 
 # Download raspbian, unzip it and SHA verify the download
@@ -17,12 +17,16 @@ if [ ! -z $RASPBIAN_SOURCE_SHA256 ] && [ "$RASPBIAN_DOWNLOAD_SHA256" != "$RASPBI
 7z x -y $RASPBIAN_DOWNLOAD_FILENAME
 
 # Find the image name within the zip & set to variable'
-EXTRACTED_IMAGE=$( 7z l $RASPBIAN_DOWNLOAD_FILENAME | awk '/-raspbian-/ {print $NF}' )
+EXTRACTED_IMAGE=$( 7z l $RASPBIAN_DOWNLOAD_FILENAME | awk '/-raspios-/ {print $NF}' )
+
+echo EXTRACTED_IMAGE: $EXTRACTED_IMAGE
 
 # Create device mapper entries for boot disk and root disk
 KPARTX_OUTPUT=$( kpartx -v -a "$EXTRACTED_IMAGE" )
 BOOT_DISK=$( echo $KPARTX_OUTPUT | grep -o 'loop.p1' )
 ROOT_DISK=$( echo $KPARTX_OUTPUT | grep -o 'loop.p2' )
+
+echo mount boot disk
 
 # Mount boot disk
 mkdir -p $SDCARD_MOUNT
@@ -41,6 +45,7 @@ network={
 }" > "$SDCARD_MOUNT/wpa_supplicant.conf"
 
 # Enable ssh
+echo enable ssh
 touch "$SDCARD_MOUNT/ssh"
 
 # Copy firstboot script that runs the fleet provisioning client on first boot
