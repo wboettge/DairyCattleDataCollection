@@ -1,0 +1,17 @@
+{
+    "_comment": "This sample JSON file can be used for updating the github.",
+    "version": "1.0",
+    "steps": [
+      {
+        "action": {
+          "name": "updateFromGit",
+          "type": "runHandler",
+          "input": {
+            "handler": "publishRPiIP.py",
+            "path": "default"
+          },
+          "runAsUser": "root"
+        }
+      }
+    ]
+  }

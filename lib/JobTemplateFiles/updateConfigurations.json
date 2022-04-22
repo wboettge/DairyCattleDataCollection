@@ -1,0 +1,15 @@
+{
+    "_comment": "This sample JSON file can be used for running RPiIP file from cloud storage",
+    "version": "1.0",
+    "steps": [
+      {
+        "action": {
+          "name": "Update Configurations",
+          "type": "updateConfigurations",
+          "input": {
+            "SAMPLING_FREQUENCY": "2"
+          }
+        }
+      }
+    ]
+  }

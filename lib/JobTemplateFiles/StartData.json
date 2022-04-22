@@ -1,0 +1,17 @@
+{
+    "_comment": "This sample JSON file can be used to start an application to allow data to be collected.",
+    "version": "1.0",
+    "steps": [
+      {
+        "action": {
+          "name": "StartData",
+          "type": "runHandler",
+          "input": {
+            "handler": "publishRPiIP.py",
+            "path": "default"
+          },
+          "runAsUser": "root"
+        }
+      }
+    ]
+  }
