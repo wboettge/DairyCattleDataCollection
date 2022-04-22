@@ -5,6 +5,7 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as iot from 'aws-cdk-lib/aws-iot';
 import * as timestream from 'aws-cdk-lib/aws-timestream';
+import * as s3Assets from 'aws-cdk-lib/aws-s3-assets';
 
 import { Construct } from 'constructs';
 import {readFileSync} from 'fs';
@@ -56,6 +57,12 @@ export class DairyCattleDataCollectionStack extends cdk.Stack {
         ruleDisabled: false,
       },
     });
+
+    // new iot.CfnJobTemplate(this, 'UpdateConfigTemplate', {
+    //   jobTemplateId: 'UpdateConfigurations',
+    //   description: 'Updates the environmnet variables used to configure programs running on the RPi. Can restart applications if necessary',
+    //   document: readFileSync('lib/JobTemplateFiles/updateConfigurations.json', 'utf8')
+    // });
   };
 };
 
