@@ -57,12 +57,6 @@ export class DairyCattleDataCollectionStack extends cdk.Stack {
         ruleDisabled: false,
       },
     });
-
-    // new iot.CfnJobTemplate(this, 'UpdateConfigTemplate', {
-    //   jobTemplateId: 'UpdateConfigurations',
-    //   description: 'Updates the environmnet variables used to configure programs running on the RPi. Can restart applications if necessary',
-    //   document: readFileSync('lib/JobTemplateFiles/updateConfigurations.json', 'utf8')
-    // });
   };
 };
 
