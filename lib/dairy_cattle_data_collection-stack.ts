@@ -99,7 +99,7 @@ export class GrafanaServerStack extends cdk.Stack {
       machineImage: new ec2.AmazonLinuxImage({
         generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
       }),
-      keyName: 'AWS', // TODO create our own keys
+      // keyName: 'AWS', // TODO create our own keys
       init: ec2.CloudFormationInit.fromElements(
         ec2.InitFile.fromFileInline('/etc/grafana/provisioning/dashboards/dashboards.yaml', './lib/Grafana/dashboards.yaml'),
         ec2.InitFile.fromFileInline('/etc/grafana/provisioning/datasources/datasources.yaml', './lib/Grafana/datasources.yaml'),
