@@ -35,7 +35,7 @@ mount /dev/mapper/${BOOT_DISK} $SDCARD_MOUNT
 # Configure Wifi
 # See https://raspberrypi.stackexchange.com/questions/15393/connect-to-unsecured-wireless-network
 echo "
-ctrl_interface=DIR=/var/run/wpa_suplicant GROUP=netdev
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
 country=$WIFI_COUNTRY
 
