@@ -2,7 +2,8 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-RASPBIAN_DOWNLOAD_FILENAME="raspbian_image.zip"
+RASPBIAN_DOWNLOAD_FILENAME="raspios.img.xz"
+EXTRACTED_IMAGE="raspios.img"
 RASPBIAN_SOURCE_URL="https://downloads.raspberrypi.org/raspios_armhf_latest"
 RASPBIAN_URL_BASE="https://downloads.raspberrypi.org/raspios_armhf/images/"
 SDCARD_MOUNT="/mnt/sdcard"
@@ -14,10 +15,7 @@ RASPBIAN_SOURCE_SHA256_FILE=$( wget -q $RASPBIAN_URL_BASE/$VERSION -O - | xmllin
 RASPBIAN_SOURCE_SHA256=$( wget -q "$RASPBIAN_URL_BASE/$VERSION/$RASPBIAN_SOURCE_SHA256_FILE" -O - | awk '{print $1}' )
 RASPBIAN_DOWNLOAD_SHA256=$( sha256sum $RASPBIAN_DOWNLOAD_FILENAME |awk '{printf $1}' )
 if [ ! -z $RASPBIAN_SOURCE_SHA256 ] && [ "$RASPBIAN_DOWNLOAD_SHA256" != "$RASPBIAN_SOURCE_SHA256" ]; then echo "Build aborted.  SHA256 does not match"; exit 2; fi
-7z x -y $RASPBIAN_DOWNLOAD_FILENAME
-
-# Find the image name within the zip & set to variable'
-EXTRACTED_IMAGE=$( 7z l $RASPBIAN_DOWNLOAD_FILENAME | awk '/-raspios-/ {print $NF}' )
+unxz -v $RASPBIAN_DOWNLOAD_FILENAME
 
 echo EXTRACTED_IMAGE: $EXTRACTED_IMAGE
 
