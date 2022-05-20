@@ -22,8 +22,8 @@ export class DairyCattleDataCollectionStack extends cdk.Stack {
     const cfnTable = new timestream.CfnTable(this, 'TimeStreamTable', {
       databaseName: 'CFTestDB',
       retentionProperties: {
-        'MemoryStoreRetentionPeriodInHours': '24',
-        'MagneticStoreRetentionPeriodInDays': '7'
+        'MemoryStoreRetentionPeriodInDays': '14',
+        'MagneticStoreRetentionPeriodInYears': '10'
       },
       tableName: 'CFTestTable'
     });
