@@ -239,9 +239,14 @@ class ProvisioningHandler:
         
         # Register newly aquired cert
         self.register_thing(self.unique_id, self.ownership_token)
+
+
+    def create_env_file(self):
+        with open('{}/.env'.format(self.secure_cert_path), 'w+') as f:
+            f.write('AWS_ENPOINT={}'.format(self.iot_endpoint))
+            f.write('IOT_CERT_ID={}'.format(self.new_key_root))
+
         
-
-
     def register_thing(self, serial, token):
         """Calls the fleet provisioning service responsible for acting upon instructions within device templates.
         

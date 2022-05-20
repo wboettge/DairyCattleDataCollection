@@ -33,5 +33,17 @@ python3 main.py ${device_serial}
 mkdir /etc/iot-certificates
 mv ./certs/* /etc/iot-certificates/
 
+cd /home/pi/
+git clone https://github.com/wboettge/DairyCattleRaspberryPi.git
+
+cd DairyCattleRaspberryPi/stm32/
+mv /etc/iot-certificates/.env .
+echo "
+IOT_CERT_DIR=/etc/iot-certificates
+CERT_FILE=${IOT_CERT_DIR}/${IOT_CERT_ID}-certificate.pem.crt
+PRI_KEY_FILE=${IOT_CERT_DIR}/${IOT_CERT_ID}-private.pem.key
+ROOT_CA_FILE=${IOT_CERT_DIR}/root.ca.pem
+THING_NAME=${device_serial}" >> .env
+
 # reboot pi
 /sbin/shutdown -r 1 "reboot in 1 minute"

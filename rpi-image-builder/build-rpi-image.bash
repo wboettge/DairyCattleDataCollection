@@ -2,9 +2,9 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-RASPBIAN_DOWNLOAD_FILENAME="raspios.img.xz"
+RASPBIAN_DOWNLOAD_FILENAME="raspbian_image.zip"
 EXTRACTED_IMAGE="raspios.img"
-RASPBIAN_SOURCE_URL="https://downloads.raspberrypi.org/raspios_armhf_latest"
+RASPBIAN_SOURCE_URL="https://downloads.raspberrypi.org/raspios_armhf/images/raspios_armhf-2022-01-28/2022-01-28-raspios-bullseye-armhf.zip"
 RASPBIAN_URL_BASE="https://downloads.raspberrypi.org/raspios_armhf/images/"
 SDCARD_MOUNT="/mnt/sdcard"
 
@@ -15,7 +15,10 @@ RASPBIAN_SOURCE_SHA256_FILE=$( wget -q $RASPBIAN_URL_BASE/$VERSION -O - | xmllin
 RASPBIAN_SOURCE_SHA256=$( wget -q "$RASPBIAN_URL_BASE/$VERSION/$RASPBIAN_SOURCE_SHA256_FILE" -O - | awk '{print $1}' )
 RASPBIAN_DOWNLOAD_SHA256=$( sha256sum $RASPBIAN_DOWNLOAD_FILENAME |awk '{printf $1}' )
 if [ ! -z $RASPBIAN_SOURCE_SHA256 ] && [ "$RASPBIAN_DOWNLOAD_SHA256" != "$RASPBIAN_SOURCE_SHA256" ]; then echo "Build aborted.  SHA256 does not match"; exit 2; fi
-unxz -v $RASPBIAN_DOWNLOAD_FILENAME
+7z x -y $RASPBIAN_DOWNLOAD_FILENAME
+
+# Find the image name within the zip & set to variable'
+EXTRACTED_IMAGE=$( 7z l $RASPBIAN_DOWNLOAD_FILENAME | awk '/-raspios-/ {print $NF}' )
 
 echo EXTRACTED_IMAGE: $EXTRACTED_IMAGE
 
@@ -71,6 +74,13 @@ cp -rv "aws-iot-fleet-provisioning" "$SDCARD_MOUNT/etc/"
 cp -v firstboot.service "$SDCARD_MOUNT/lib/systemd/system/firstboot.service"
 cd "$SDCARD_MOUNT/etc/systemd/system/multi-user.target.wants" && ln -s "/lib/systemd/system/firstboot.service" "./firstboot.service"
 cd -
+
+# Add service for device client
+cp -v aws-iot-device-client.service "$SDCARD_MOUNT/etc/systemd/system/aws-iot-device-client.service"
+
+# Copy the device-client binary
+cp -v "aws-iot-device-client" "$SDCARD_MOUNT/sbin/"
+
 
 # Unmount disk and create the artifact
 umount "$SDCARD_MOUNT"
